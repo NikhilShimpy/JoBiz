@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "34479116262",
+    "project_id": "findyourjob-9410e",
+    "storage_bucket": "findyourjob-9410e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34479116262:android:7e4d439c72c12bf7489027",
+        "android_client_info": {
+          "package_name": "com.example.find_your_job"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrar9chizNYbwYMIAzj97PKc1eelxqJmo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
