@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+  <script src="https://www.gstatic.com/firebasejs/9.8.4/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.8.4/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.8.4/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <div class="login-wrapper">
+    <!-- LEFT ILLUSTRATION -->
+    <div class="login-left">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="3D Login Illustration">
+    </div>
+
+    <!-- RIGHT LOGIN FORM -->
+    <div class="login-right">
+      <div class="login-card">
+        <h2>Login</h2>
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required>
+        <button onclick="signIn()">Login</button>
+
+        <!-- Sign Up link -->
+        <p class="redirect-text">Don't have an account?  
+          <a href="/signup" class="link">Sign Up here</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>

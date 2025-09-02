@@ -1,12 +1,6 @@
 // setting up firebase with our website
 const firebaseApp = firebase.initializeApp({
-   apiKey: "AIzaSyDS8tGustKzem7u8U5ntcLMimgLJC_fQWI",
-  authDomain: "skillswap-21922.firebaseapp.com",
-  projectId: "skillswap-21922",
-  storageBucket: "skillswap-21922.firebasestorage.app",
-  messagingSenderId: "942449711732",
-  appId: "1:942449711732:web:ed1ac7c996deb34b998f21",
-  measurementId: "G-DL61KXD2YR"
+   your config
 });
 const db = firebaseApp.firestore();
 const auth = firebaseApp.auth();

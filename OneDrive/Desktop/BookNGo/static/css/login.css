@@ -1,0 +1,133 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.login-wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden; /* Prevent scroll */
+}
+
+.login-left {
+  flex: 1;
+  background: linear-gradient(120deg, #00b4d8, #0077b6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.login-left img {
+  max-width: 80%;
+  max-height: 60%;
+  object-fit: contain;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Smooth floating animation for 3D effect */
+@keyframes float {
+  0% { transform: translateY(0px) rotateY(0deg);}
+  50% { transform: translateY(-15px) rotateY(10deg);}
+  100% { transform: translateY(0px) rotateY(0deg);}
+}
+
+.login-right {
+  flex: 1;
+  background: url('https://www.transparenttextures.com/patterns/cubes.png');
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+.login-card h2 {
+  color: #0077b6;
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+input:focus {
+  outline: 2px solid #00b4d8;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-top: 1rem;
+  border: none;
+  background: #0077b6;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #005f8a;
+}
+
+.redirect-text {
+  color: #333;
+  margin-top: 1rem;
+}
+
+.link {
+  color: #0077b6;
+  font-weight: bold;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 991px) {
+  .login-wrapper {
+    flex-direction: column;
+  }
+
+  .login-left {
+    display: none;
+  }
+
+  .login-right {
+    padding: 1rem;
+    min-height: 100vh;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 1.5rem;
+  }
+}

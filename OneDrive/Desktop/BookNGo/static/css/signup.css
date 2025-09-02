@@ -1,0 +1,127 @@
+.signup-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.signup-left {
+  flex: 1;
+  background: linear-gradient(120deg, #00b4d8, #0077b6);
+  flex-direction: column;
+  text-align: center;
+  padding: 2rem;
+}
+
+.signup-left img {
+  max-width: 350px;
+}
+
+.signup-right {
+  flex: 1;
+  background: url('https://www.transparenttextures.com/patterns/cubes.png');
+  background-size: cover;
+  padding: 2rem;
+}
+
+.signup-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.signup-card h2 {
+  color: #0077b6;
+}
+
+label, .form-label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-size: 1rem;
+}
+
+input:focus, select:focus {
+  outline: 2px solid #00b4d8;
+}
+
+button {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+.redirect-text {
+  color: #333;
+}
+
+.link {
+  color: #0077b6;
+  font-weight: bold;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 991px) {
+  .signup-wrapper {
+    flex-direction: column;
+    background: linear-gradient(120deg, #00b4d8, #0077b6);
+  }
+
+  .signup-left {
+    display: none;
+  }
+
+  .signup-right {
+    background: transparent;
+    padding: 1rem;
+  }
+
+  .signup-card {
+    max-width: 100%;
+    padding: 1.5rem;
+  }
+}
+
+#suggestions {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    width: 100%;
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+    border-radius: 0 0 6px 6px;
+  }
+
+  /* Each suggestion item */
+  #suggestions .suggestion {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Hover effect */
+  #suggestions .suggestion:hover {
+    background-color: #f8f9fa;
+  }
+
+  /* Last item should not have border */
+  #suggestions .suggestion:last-child {
+    border-bottom: none;
+  }

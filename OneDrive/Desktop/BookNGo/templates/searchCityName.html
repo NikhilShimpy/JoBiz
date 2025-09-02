@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fast City/Town/Village Autocomplete</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f8f9fa;
+    }
+    h2 { margin-bottom: 20px; }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #suggestions {
+      border: 1px solid #ccc;
+      border-top: none;
+      max-height: 220px;
+      overflow-y: auto;
+      background: #fff;
+      width: 100%;
+      position: absolute;
+      z-index: 1000;
+    }
+    .suggestion {
+      padding: 10px;
+      cursor: pointer;
+    }
+    .suggestion:hover {
+      background: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <h2>Select a City / Town / Village</h2>
+  <div style="position: relative;">
+    <input type="text" id="address" placeholder="Start typing...">
+    <div id="suggestions"></div>
+  </div>
+
+  <script>
+    const input = document.getElementById("address");
+    const suggestionsBox = document.getElementById("suggestions");
+
+    let debounceTimer;
+
+    async function fetchCities(query) {
+      if (!query) {
+        suggestionsBox.innerHTML = "";
+        return;
+      }
+
+      try {
+        const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${query}&limit=10&sort=-population`;
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "X-RapidAPI-Key": "e78ac4f7femsha053ccd414d5395p17b70ejsn895535c28125",  // <-- replace with your key
+            "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com"
+          }
+        });
+        const data = await response.json();
+
+        suggestionsBox.innerHTML = "";
+        if (data.data && data.data.length > 0) {
+          data.data.forEach(city => {
+            const div = document.createElement("div");
+            div.classList.add("suggestion");
+            div.textContent = `${city.city}, ${city.region}, ${city.country}`;
+            div.onclick = () => {
+              input.value = div.textContent;
+              suggestionsBox.innerHTML = "";
+            };
+            suggestionsBox.appendChild(div);
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      }
+    }
+
+    input.addEventListener("input", () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        fetchCities(input.value.trim());
+      }, 200); // very fast debounce
+    });
+  </script>
+</body>
+</html>

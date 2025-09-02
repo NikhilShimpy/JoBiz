@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile — BookNGo</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/user_profile.css') }}">
+
+  <!-- Firebase v9 Modular SDK -->
+  <script type="module" src="{{ url_for('static', filename='js/user_profile.js') }}"></script>
+
+  <!-- AOS Animations -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Background Layers -->
+  <div class="bg-layer bg-layer-1"></div>
+  <div class="bg-layer bg-layer-2"></div>
+  <div class="bg-layer bg-layer-3"></div>
+
+  <section class="profile-container" data-aos="zoom-in">
+    <div class="profile-card tilt-on-hover">
+      <div class="profile-image">
+        <img id="profileImg" src="https://via.placeholder.com/150" alt="Profile Image">
+      </div>
+      <div class="profile-info">
+        <h2 id="userName">Loading...</h2>
+        <p><strong>Email:</strong> <span id="userEmail">N/A</span></p>
+        <p><strong>Mobile:</strong> <span id="userMobile">N/A</span></p>
+        <p><strong>Address:</strong> <span id="userAddress">N/A</span></p>
+        <p><strong>Role:</strong> <span id="userrole">N/A</span></p>
+
+        <!-- Edit Button -->
+        <button class="btn-glow edit-btn" id="editBtn">Edit Profile</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Modal ================= -->
+  <div id="editModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Edit Profile</h2>
+      <form id="editForm">
+        <div class="form-group">
+          <label for="editName">Full Name</label>
+          <input type="text" id="editName" placeholder="Full Name">
+        </div>
+
+        <div class="form-group">
+          <label for="editMobile">Mobile Number</label>
+          <input type="text" id="editMobile" placeholder="Mobile Number">
+        </div>
+
+        <div class="form-group">
+          <label for="editAddress">Address</label>
+          <input type="text" id="editAddress" placeholder="Address">
+        </div>
+
+        <div class="form-group">
+          <label for="editProfileUrl">Profile Image URL</label>
+          <input type="text" id="editProfileUrl" placeholder="Profile Image URL">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-glow" id="saveBtn">Save</button>
+          <button type="button" class="btn-glow cancel" id="closeBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- AOS Script -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>AOS.init();</script>
+</body>
+</html>

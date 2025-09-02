@@ -1,0 +1,30 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f8f9fa;
+}
+
+.owner-card {
+  border-radius: 15px;
+  background: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.owner-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+h2 {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+button.btn {
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+#message {
+  font-size: 0.95rem;
+}

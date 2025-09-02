@@ -1,0 +1,52 @@
+.category-section {
+  margin-bottom: 40px;
+}
+
+.category-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  border-left: 5px solid #007bff;
+  padding-left: 10px;
+}
+
+.product-card {
+  border-radius: 12px;
+  padding: 15px;
+  background: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.product-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.product-status {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.status-available {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-rented {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-maintenance {
+  background-color: #f8d7da;
+  color: #721c24;
+}

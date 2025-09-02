@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/owner_dashboard.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- firebase  -->
+<script src="https://www.gstatic.com/firebasejs/9.8.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.8.4/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.8.4/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <!-- 3D Background Elements -->
+  <div class="bg-layer bg-layer-1"></div>
+  <div class="bg-layer bg-layer-2"></div>
+  <div class="bg-layer bg-layer-3"></div>
+  
+  <header class="glass-nav dashboard-header">
+    <div class="logo">
+      <span class="logo-dot"></span>Dashboard
+    </div>
+
+    <!-- Hamburger for Mobile -->
+    <div class="hamburger" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    
+    <nav class="nav-menu">
+      <button class="nav-btn">Dashboard</button>
+
+      <a href="{{ url_for('main.owner_product_add') }}">
+        <button class="nav-btn">ADD Products</button>
+      </a>
+      <button class="nav-btn" onclick="window.location.href='/owner/products/list'">View Products</button>
+      <button class="nav-btn">Rental</button>
+      <button class="nav-btn">Order</button>
+      <button class="nav-btn">Reporting</button>
+      <button class="nav-btn">Setting</button>
+    </nav>
+
+    <div class="user-profile">
+  <div class="profile-initial" id="profile-initial"></div>
+  <span id="profile-name" style="cursor: pointer;"></span>
+</div>
+
+
+
+
+<script>
+  // Firebase config
+  const firebaseApp = firebase.initializeApp({
+    apiKey: "AIzaSyD95Xp-9Yu_8W35q6xLPR47vTehfBQee_k",
+    authDomain: "bookngo-ef4f0.firebaseapp.com",
+    projectId: "bookngo-ef4f0",
+    storageBucket: "bookngo-ef4f0.firebasestorage.app",
+    messagingSenderId: "483413806629",
+    appId: "1:483413806629:web:c1233395b07adc8088b9cc",
+    measurementId: "G-5KRF0WT5TC"
+  });
+
+  const db = firebaseApp.firestore();
+  const auth = firebaseApp.auth();
+
+  // Fetch current user's first name
+  auth.onAuthStateChanged(async (user) => {
+    if (!user) return;
+
+    try {
+      let userDoc = null;
+
+      // Try fetching by UID
+      const uidDoc = await db.collection("users").doc(user.uid).get();
+      if (uidDoc.exists) {
+        userDoc = uidDoc;
+      } else {
+        // fallback: search by email
+        const snapshot = await db.collection("users")
+          .where("email", "==", user.email)
+          .limit(1)
+          .get();
+        if (!snapshot.empty) {
+          userDoc = snapshot.docs[0];
+        }
+      }
+
+      if (userDoc) {
+        const data = userDoc.data();
+        const fullName = data.name || user.email;
+        const firstName = fullName.split(" ")[0];
+        const initial = firstName.charAt(0).toUpperCase();
+
+        document.getElementById("profile-name").textContent = firstName;
+        document.getElementById("profile-initial").textContent = initial;
+      } else {
+        // fallback if no document found
+        const fallbackName = user.email.split("@")[0];
+        document.getElementById("profile-name").textContent = fallbackName;
+        document.getElementById("profile-initial").textContent = fallbackName.charAt(0).toUpperCase();
+      }
+    } catch (err) {
+      console.error("Error fetching user:", err);
+    }
+  });
+</script>
+
+  </header>
+
+  <div class="dashboard-main">
+    <!-- Search & Period -->
+    <div class="search-period">
+      <div class="search-container">
+        <svg class="search-icon" viewBox="0 0 24 24">
+          <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <input type="text" placeholder="Search..." />
+      </div>
+      <select class="period-select">
+        <option>Last 7 days</option>
+        <option selected>Last 30 days</option>
+        <option>Last 90 days</option>
+      </select>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      <div class="card card-1">
+        <div class="card-icon">📊</div>
+        <div class="card-content">
+          <h3>Quotations</h3>
+          <span>10</span>
+        </div>
+        <div class="card-glow"></div>
+      </div>
+      <div class="card card-2">
+        <div class="card-icon">🔄</div>
+        <div class="card-content">
+          <h3>Rentals</h3>
+          <span>26</span>
+        </div>
+        <div class="card-glow"></div>
+      </div>
+      <div class="card card-3">
+        <div class="card-icon">💰</div>
+        <div class="card-content">
+          <h3>Revenue</h3>
+          <span>10,599</span>
+        </div>
+        <div class="card-glow"></div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="chart-container">
+      <div class="chart-wrapper">
+        <h3>Monthly Revenue</h3>
+        <canvas id="revenueChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Tables Section -->
+    <div class="tables-container">
+      <div class="table-wrapper glass-panel">
+        <h3>Top Product Categories</h3>
+        <table>
+          <thead>
+            <tr><th>Category</th><th>Ordered</th><th>Revenue</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Rental - Service</td><td>25</td><td>2940</td></tr>
+            <tr><td>Medical Equipment</td><td>18</td><td>2250</td></tr>
+            <tr><td>Event Supplies</td><td>12</td><td>1800</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrapper glass-panel">
+        <h3>Top Products</h3>
+        <table>
+          <thead>
+            <tr><th>Product</th><th>Ordered</th><th>Revenue</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Wheelchairs</td><td>10</td><td>3032</td></tr>
+            <tr><td>Tables</td><td>5</td><td>1008</td></tr>
+            <tr><td>Chairs</td><td>4</td><td>3008</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Top Customers -->
+    <div class="tables-container">
+      <div class="table-wrapper glass-panel">
+        <h3>Top Customers</h3>
+        <table>
+          <thead>
+            <tr><th>Customer</th><th>Ordered</th><th>Revenue</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Customer1</td><td>10</td><td>3032</td></tr>
+            <tr><td>Customer2</td><td>5</td><td>1008</td></tr>
+            <tr><td>Customer3</td><td>4</td><td>3008</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{{ url_for('static', filename='js/owner_dashboard.js') }}"></script>
+  
+  <!-- firebase  -->
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore-compat.js"></script>
+</body>
+</html>

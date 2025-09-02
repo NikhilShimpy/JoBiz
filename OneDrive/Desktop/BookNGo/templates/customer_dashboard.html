@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/customer_dashboard.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <!-- firebase  -->
+<script src="https://www.gstatic.com/firebasejs/9.8.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.8.4/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.8.4/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <!-- Parallax Layers -->
+  <div class="bg-layer bg-layer-1"></div>
+  <div class="bg-layer bg-layer-2"></div>
+  <div class="bg-layer bg-layer-3"></div>
+
+  <!-- Header -->
+  <header class="glass-nav">
+    <div class="logo">
+      <span class="logo-dot"></span> BookNGo
+    </div>
+
+    <div class="hamburger" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <nav class="nav-menu">
+      <button class="nav-btn active">Home</button>
+      <button class="nav-btn">Rental Shop</button>
+      <button class="nav-btn">Wishlist</button>
+      <button class="nav-btn">Cart</button>
+      <button class="nav-btn">Contact Us</button>
+    </nav>
+
+   <div class="user-profile">
+  <div class="profile-initial" id="profile-initial"></div>
+  <span id="profile-name" style="cursor: pointer;"></span>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const profileName = document.getElementById("profile-name");
+    const profileInitial = document.getElementById("profile-initial");
+
+    function redirectToProfile() {
+      // Flask route (example)
+      window.location.href = "/user_profile";  
+    }
+
+    profileName.addEventListener("click", redirectToProfile);
+    profileInitial.addEventListener("click", redirectToProfile);
+  });
+</script>
+
+
+<script>
+  // Firebase config
+  const firebaseApp = firebase.initializeApp({
+    apiKey: "AIzaSyD95Xp-9Yu_8W35q6xLPR47vTehfBQee_k",
+    authDomain: "bookngo-ef4f0.firebaseapp.com",
+    projectId: "bookngo-ef4f0",
+    storageBucket: "bookngo-ef4f0.firebasestorage.app",
+    messagingSenderId: "483413806629",
+    appId: "1:483413806629:web:c1233395b07adc8088b9cc",
+    measurementId: "G-5KRF0WT5TC"
+  });
+
+  const db = firebaseApp.firestore();
+  const auth = firebaseApp.auth();
+
+  // Fetch current user's first name
+  auth.onAuthStateChanged(async (user) => {
+    if (!user) return;
+
+    try {
+      let userDoc = null;
+
+      // Try fetching by UID
+      const uidDoc = await db.collection("users").doc(user.uid).get();
+      if (uidDoc.exists) {
+        userDoc = uidDoc;
+      } else {
+        // fallback: search by email
+        const snapshot = await db.collection("users")
+          .where("email", "==", user.email)
+          .limit(1)
+          .get();
+        if (!snapshot.empty) {
+          userDoc = snapshot.docs[0];
+        }
+      }
+
+      if (userDoc) {
+        const data = userDoc.data();
+        const fullName = data.name || user.email;
+        const firstName = fullName.split(" ")[0];
+        const initial = firstName.charAt(0).toUpperCase();
+
+        document.getElementById("profile-name").textContent = firstName;
+        document.getElementById("profile-initial").textContent = initial;
+      } else {
+        // fallback if no document found
+        const fallbackName = user.email.split("@")[0];
+        document.getElementById("profile-name").textContent = fallbackName;
+        document.getElementById("profile-initial").textContent = fallbackName.charAt(0).toUpperCase();
+      }
+    } catch (err) {
+      console.error("Error fetching user:", err);
+    }
+  });
+</script>
+
+  </header>
+
+  <!-- Dashboard Main -->
+  <div class="dashboard-main">
+    <!-- Search & Filter -->
+    <div class="search-period">
+      <div class="search-container">
+        <svg class="search-icon" viewBox="0 0 24 24">
+          <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <input type="text" placeholder="Search products...">
+      </div>
+      <select class="period-select">
+        <option>Price Low to High</option>
+        <option>Price High to Low</option>
+        <option selected>Newest First</option>
+      </select>
+    </div>
+
+    <!-- Product Categories - Stacked on mobile, inline on desktop -->
+    <div class="categories-container">
+      <div class="category-section">
+        <h3 class="category-toggle" onclick="toggleCategory('furniture')">Furniture ▼</h3>
+        <div class="category-content" id="furniture-category">
+          <div class="card card-1">
+            <div class="card-glow"></div>
+            <div class="card-icon">🛋️</div>
+            <div class="card-content">
+              <h3>Furniture</h3>
+              <span>50 Items</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="category-section">
+        <h3 class="category-toggle" onclick="toggleCategory('sports')">Sports ▼</h3>
+        <div class="category-content" id="sports-category">
+          <div class="card card-2">
+            <div class="card-glow"></div>
+            <div class="card-icon">🎾</div>
+            <div class="card-content">
+              <h3>Sports</h3>
+              <span>30 Items</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="category-section">
+        <h3 class="category-toggle" onclick="toggleCategory('appliances')">Appliances ▼</h3>
+        <div class="category-content" id="appliances-category">
+          <div class="card card-3">
+            <div class="card-glow"></div>
+            <div class="card-icon">📦</div>
+            <div class="card-content">
+              <h3>Appliances</h3>
+              <span>20 Items</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products List -->
+    <div class="tables-container">
+      <div class="glass-panel">
+        <h3 class="product-toggle" onclick="toggleProducts()">Available Products ▼</h3>
+        <div class="product-grid" id="products-section">
+          <div class="product-card card-1">
+            <div class="card-glow"></div>
+            <div class="product-image">🪑</div>
+            <div class="product-content">
+              <h3>Premium Office Chair</h3>
+              <div class="product-price">₹1000/day</div>
+              <div class="product-rating">★★★★☆ (24)</div>
+              <button class="add-to-cart">Add to Cart</button>
+            </div>
+          </div>
+          <div class="product-card card-2">
+            <div class="card-glow"></div>
+            <div class="product-image">🏓</div>
+            <div class="product-content">
+              <h3>Table Tennis Set</h3>
+              <div class="product-price">₹1500/day</div>
+              <div class="product-rating">★★★★★ (12)</div>
+              <button class="add-to-cart">Add to Cart</button>
+            </div>
+          </div>
+          <div class="product-card card-3">
+            <div class="card-glow"></div>
+            <div class="product-image">🛏️</div>
+            <div class="product-content">
+              <h3>Queen Size Bed</h3>
+              <div class="product-price">₹2000/day</div>
+              <div class="product-rating">★★★★☆ (18)</div>
+              <button class="add-to-cart">Add to Cart</button>
+            </div>
+          </div>
+          <div class="product-card card-1">
+            <div class="card-glow"></div>
+            <div class="product-image">🚲</div>
+            <div class="product-content">
+              <h3>Mountain Bike</h3>
+              <div class="product-price">₹2500/day</div>
+              <div class="product-rating">★★★★★ (32)</div>
+              <button class="add-to-cart">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/customer_dashboard.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+flask
+firebase-admin
+openai
+requests
+app\serviceAccountKey.json
