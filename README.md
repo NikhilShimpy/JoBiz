@@ -1,4 +1,4 @@
-# find_your_job
+# JoBiz
 
 A new Flutter project.
 
