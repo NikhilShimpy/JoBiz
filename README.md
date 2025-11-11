@@ -1,6 +1,6 @@
 # JoBiz
 
-A new Flutter project.
+A new Flutter app/web that provide jobs , internship , business idea to start and startup.
 
 ## Getting Started
 
